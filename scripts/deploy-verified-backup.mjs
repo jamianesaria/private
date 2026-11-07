@@ -27,5 +27,9 @@ if (!stagingMatchesSnapshot(status, manifest)) {
   throw new Error('Staging version does not match the generated snapshot; backup was not changed.');
 }
 await run(['scripts/check-static-backup-routes.mjs'], { QA_BASE_URL: staging });
+if (process.argv.includes('--staging-only')) {
+  console.log('Staging checks passed; backup deployment was intentionally skipped.');
+  process.exit(0);
+}
 await run([wrangler, 'deploy', '--config', 'wrangler.static.jsonc']);
 console.log('Verified snapshot deployed to the Cloudflare backup.');
