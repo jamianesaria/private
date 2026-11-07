@@ -32,4 +32,8 @@ if (process.argv.includes('--staging-only')) {
   process.exit(0);
 }
 await run([wrangler, 'deploy', '--config', 'wrangler.static.jsonc']);
+const backupResponse = await fetch('https://jamia-backup.jamianesaria.workers.dev/api/backup-status', { headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(15000) });
+if (!backupResponse.ok || !stagingMatchesSnapshot(await backupResponse.json(), manifest)) {
+  throw new Error('The main backup did not report the expected snapshot after deployment.');
+}
 console.log('Verified snapshot deployed to the Cloudflare backup.');

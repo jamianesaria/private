@@ -3,6 +3,10 @@
   "name": "jamia-backup-ci-preview",
   "main": "cloudflare/static-worker.ts",
   "compatibility_date": "2026-11-07",
+  "routes": [
+    { "pattern": "nesariamadrasa.com/*", "zone_name": "nesariamadrasa.com" },
+    { "pattern": "www.nesariamadrasa.com/*", "zone_name": "nesariamadrasa.com" }
+  ],
   "alias": {
     "next/server": "./cloudflare/next-server.ts",
     "server-only": "./cloudflare/server-only.ts"
