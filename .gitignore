@@ -45,3 +45,8 @@ next-env.d.ts
 .gemini/
 
 .cms-work/
+
+# Cloudflare build artifacts and local deployment state
+/.open-next/
+/.wrangler/
+/.backup-static/

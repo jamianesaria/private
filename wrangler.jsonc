@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jamia-backup",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-07",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "76f92ad4a6f4409bacd8e4470eeed4bb" }],
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "jamia-backup" }],
+  "observability": { "enabled": true }
+}

@@ -9,13 +9,16 @@
     "lint": "eslint",
     "test": "node --test scripts/test-page-links.mjs scripts/test-departments.mjs scripts/test-revalidation.mjs",
     "backup": "node scripts/backup-sanity.mjs",
-    "backup:verify": "node scripts/verify-sanity-backup.mjs"
+    "backup:verify": "node scripts/verify-sanity-backup.mjs",
+    "cloudflare:snapshot": "node scripts/build-backup-snapshots.mjs",
+    "cloudflare:refresh": "node scripts/refresh-static-backup.mjs",
+    "cloudflare:upload": "wrangler versions upload --config wrangler.static.jsonc --preview-alias static-test"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.20.0",
     "lucide-react": "^1.57.0",
-    "next": "16.4.1",
+    "next": "16.4.5",
     "next-sanity": "^13.3.4",
     "react": "19.3.1",
     "react-dom": "19.3.1",
@@ -46,12 +49,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "@opennextjs/cloudflare": "^1.20.16",
     "eslint": "^9",
     "eslint-config-next": "16.4.1",
     "playwright": "^1.65.0",
     "postcss": "^8.5.31",
     "tailwindcss": "^4",
     "tar-stream": "^3.2.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.73.0"
   }
 }

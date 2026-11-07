@@ -1,7 +1,7 @@
 import "server-only";
 import { createHmac } from "node:crypto";
 import { createClient, type SanityClient } from "@sanity/client";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { projectId, apiVersion, dataset as publicDataset } from "@/sanity/env";
 import { SubmissionError, validateSubmission, type SubmissionKind } from "./validation";
 
@@ -24,7 +24,7 @@ async function privateClient(): Promise<SanityClient> {
   return client;
 }
 
-export async function receiveSubmission(request: NextRequest, kind: SubmissionKind) {
+export async function receiveSubmission(request: Pick<Request, "headers" | "text"> & { nextUrl: { origin: string } }, kind: SubmissionKind) {
   try {
     const origin = request.headers.get("origin");
     if (origin && origin !== request.nextUrl.origin) throw new SubmissionError("এই ঠিকানা থেকে ফরম পাঠানো যাবে না।", 403);
