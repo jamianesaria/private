@@ -1,13 +1,18 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "jamia-backup",
-  "main": ".open-next/worker.js",
+  "name": "jamia-backup-ci-preview",
+  "main": "cloudflare/static-worker.ts",
   "compatibility_date": "2026-11-07",
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
+  "alias": {
+    "next/server": "./cloudflare/next-server.ts",
+    "server-only": "./cloudflare/server-only.ts"
   },
-  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "76f92ad4a6f4409bacd8e4470eeed4bb" }],
-  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "jamia-backup" }],
+  "assets": {
+    "directory": ".backup-static/assets",
+    "binding": "ASSETS",
+    "run_worker_first": ["/*", "!/_next/static/*"],
+    "html_handling": "none",
+    "not_found_handling": "404-page"
+  },
   "observability": { "enabled": true }
 }
