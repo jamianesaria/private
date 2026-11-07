@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import { ensureManifestForTypecheck } from './backup-manifest-placeholder.mjs';
 
 const require = createRequire(import.meta.url);
 const next = require.resolve('next/dist/bin/next');
@@ -16,6 +17,7 @@ async function run(args, environment = {}) {
   });
 }
 await run(['scripts/check-snapshot-inputs.mjs']);
+await ensureManifestForTypecheck();
 await run([next, 'build', '--webpack']);
 const server = spawn(process.execPath, [next, 'start', '-p', String(port), '-H', '127.0.0.1'], { stdio: 'inherit' });
 try {
