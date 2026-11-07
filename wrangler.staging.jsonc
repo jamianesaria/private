@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jamia-backup-ci-preview",
+  "main": "cloudflare/static-worker.ts",
+  "compatibility_date": "2026-11-07",
+  "alias": {
+    "next/server": "./cloudflare/next-server.ts",
+    "server-only": "./cloudflare/server-only.ts"
+  },
+  "assets": {
+    "directory": ".backup-static/assets",
+    "binding": "ASSETS",
+    "run_worker_first": ["/*", "!/_next/static/*"],
+    "html_handling": "none",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+}

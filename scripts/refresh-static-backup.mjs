@@ -15,6 +15,7 @@ async function run(args, environment = {}) {
     child.on('exit', code => code === 0 ? resolve() : reject(new Error(`Build step failed with exit ${code}; existing deployed backup was not changed.`)));
   });
 }
+await run(['scripts/check-snapshot-inputs.mjs']);
 await run([next, 'build', '--webpack']);
 const server = spawn(process.execPath, [next, 'start', '-p', String(port), '-H', '127.0.0.1'], { stdio: 'inherit' });
 try {

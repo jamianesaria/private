@@ -2,9 +2,10 @@ import { cp, mkdir, readFile, writeFile, readdir, mkdtemp, rename, rm } from 'no
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import env from '@next/env';
-import { createClient } from '@sanity/client';
+import { checkSnapshotInputs } from './check-snapshot-inputs.mjs';
 
 env.loadEnvConfig(process.cwd());
+if (!process.env.SANITY_API_READ_TOKEN) throw new Error('A server-only Sanity read token is required for a backup snapshot.');
 const base = process.env.BACKUP_RENDER_ORIGIN || 'http://127.0.0.1:3037';
 if (!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(base)) throw new Error('Snapshots must be rendered from the isolated local build.');
 const output = path.resolve('.backup-static');
@@ -15,7 +16,7 @@ await mkdir(assets, { recursive: true });
 await cp('public', assets, { recursive: true });
 await mkdir(path.join(assets, '_next'), { recursive: true });
 await cp('.next/static', path.join(assets, '_next/static'), { recursive: true });
-const client = createClient({ projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID, dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production', apiVersion: '2026-03-01', token: process.env.SANITY_API_READ_TOKEN, useCdn: false, timeout: 15000, maxRetries: 0 });
+const client = await checkSnapshotInputs();
 const posts = await client.fetch('*[_type=="blogPost" && !defined(archivedAt) && defined(slug.current)]{"slug":slug.current,title}', {}, { perspective: 'published' });
 const coverage = JSON.parse(await readFile('src/content/coverage.json', 'utf8'));
 const paths = [...new Set([...Object.keys(coverage).filter(route => !route.includes('[')), ...posts.map(post => `/blog/${encodeURIComponent(post.slug)}`), '/studio'])];
