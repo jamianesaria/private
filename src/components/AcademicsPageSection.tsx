@@ -84,7 +84,7 @@ export default async function AcademicsPageSection({ initialDepartments }: Acade
           ><EditableText document="copy.ui.AcademicsPageSection" entry="e1k1qppm" fallback={"← হোমপেজে ফিরে যান"} /></Link>
         </div>
 
-        <InstitutionalIdentity headingAs="h1" />
+        <InstitutionalIdentity headingAs="h1" route="/academics" />
       </div>
 
       {/* =====================================================================

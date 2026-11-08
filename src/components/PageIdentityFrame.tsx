@@ -36,6 +36,6 @@ export default async function PageIdentityFrame({ route }: { route: string }) {
       </div>
       <Link href={safeBackHref} className="rounded-full border border-amber-300/30 bg-black/20 px-3 py-1 text-xs font-semibold text-amber-200 transition-colors hover:text-white" data-sanity={attribute(page, "frameBackLabel")}>{stegaClean(page?.frameBackLabel ?? "← হোমপেজে ফিরে যান")}</Link>
     </div>
-    <InstitutionalIdentity />
+    <InstitutionalIdentity route={route} />
   </section>;
 }

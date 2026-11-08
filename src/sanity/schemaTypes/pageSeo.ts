@@ -13,7 +13,7 @@ export const pageSeoType = defineType({
     defineField({ name: "seoTitle", title: "সার্চের শিরোনাম (Search title)", type: "string", description: "খালি রাখলে পাতার নাম ও প্রতিষ্ঠানের নাম ব্যবহার হবে। (Leave empty for the automatic title.)" }),
     defineField({ name: "seoDescription", title: "সার্চের পরিচিতি (Search description)", type: "text", rows: 3 }),
     defineField({ name: "breadcrumbLabel", title: "ব্রেডক্রাম্বের নাম (Breadcrumb label)", type: "string" }),
-    defineField({ name: "pageHeading", title: "প্রধান শিরোনাম (Page heading)", type: "string", description: "জামিয়া পরিচিতি এবং সাধারণ তথ্য ও তালিকার পাতার প্রধান শিরোনাম। (Main heading on About, information and list pages.)" }),
+    defineField({ name: "pageHeading", title: "প্রধান শিরোনাম (Page heading)", type: "string", description: "পাতার প্রধান শিরোনাম ও পরিচিতি ফ্রেমে ব্যবহৃত নাম। খালি রাখলে পাতার নাম দেখাবে। (Page and identity frame heading; defaults to the page name.)" }),
     // The ribbon is page-specific; the profile body is shared with the About page.
     defineField({ name: "frameEnabled", title: "উপরের পরিচিতি ফ্রেম দেখাবেন (Show top frame)", type: "boolean", initialValue: true }),
     defineField({ name: "frameEyebrow", title: "ফ্রেমের সবুজ বারের লেখা (Top ribbon)", type: "string" }),

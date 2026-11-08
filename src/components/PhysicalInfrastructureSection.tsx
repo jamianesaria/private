@@ -18,7 +18,7 @@ export default async function PhysicalInfrastructureSection() {
 
       <div className="p-6 sm:p-10 space-y-8">
         {/* Center: Madrasa Logo and Identification */}
-        <InstitutionalIdentity />
+        <InstitutionalIdentity route="/about/infrastructure" />
 
         {/* Infrastructure Highlights Grid */}
         <div className="pt-6 border-t border-gray-200">
