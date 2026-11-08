@@ -19,8 +19,94 @@ import {
   ArrowRight
 } from "lucide-react";
 import { availableClasses as _fallback_availableClasses, siteSettings as _fallback_siteSettings } from "@/data/siteData";
-import { useEditableData, EditableText } from "@/content/client";
+import { useEditableData, EditableText as CmsText } from "@/content/client";
 
+const formTranslations: Record<string, string> = {
+  "Online Registration": "অনলাইন নিবন্ধন",
+  "Student's Details": "শিক্ষার্থীর তথ্য",
+  "Student Name: ": "শিক্ষার্থীর নাম: ",
+  "Student UID:": "শিক্ষার্থীর পরিচিতি নম্বর:",
+  "Date of Birth: ": "জন্ম তারিখ: ",
+  "Birth Certificate Number:": "জন্ম নিবন্ধন নম্বর:",
+  "Gender: ": "লিঙ্গ: ",
+  "Male": "পুরুষ",
+  "Female": "মহিলা",
+  "Father's Details": "পিতার তথ্য",
+  "Father's Name: ": "পিতার নাম: ",
+  "Father's Profession:": "পিতার পেশা:",
+  "Father's Mobile No.: ": "পিতার মোবাইল নম্বর: ",
+  "Father's NID: ": "পিতার জাতীয় পরিচয়পত্র নম্বর: ",
+  "Guardian Name:": "অভিভাবকের নাম:",
+  "Relation:": "সম্পর্ক:",
+  "Mother's Details": "মাতার তথ্য",
+  "Mother's Name: ": "মাতার নাম: ",
+  "Mother's Profession:": "মাতার পেশা:",
+  "Mother's Mobile No:": "মাতার মোবাইল নম্বর:",
+  "Mother's NID:": "মাতার জাতীয় পরিচয়পত্র নম্বর:",
+  "Present Address": "বর্তমান ঠিকানা",
+  "Country: ": "দেশ: ",
+  "Bangladesh": "বাংলাদেশ",
+  "Division: ": "বিভাগ: ",
+  "Select Division": "বিভাগ নির্বাচন করুন",
+  "District: ": "জেলা: ",
+  "Select District": "জেলা নির্বাচন করুন",
+  "Upazila/Thana: ": "উপজেলা/থানা: ",
+  "Select Upazila/Thana": "উপজেলা/থানা নির্বাচন করুন",
+  "Post Office: ": "ডাকঘর: ",
+  "Post Office:": "ডাকঘর:",
+  "Postal Code:": "ডাক কোড:",
+  "Village: ": "গ্রাম: ",
+  "Village:": "গ্রাম:",
+  "Same as Present Address": "বর্তমান ঠিকানার মতো একই",
+  "Permanent Address": "স্থায়ী ঠিকানা",
+  "Admission For": "ভর্তির তথ্য",
+  "Class: ": "শ্রেণি: ",
+  "Select Class": "শ্রেণি নির্বাচন করুন",
+  "Group: ": "বিভাগ: ",
+  "Select Group": "বিভাগ নির্বাচন করুন",
+  "Year: ": "শিক্ষাবর্ষ: ",
+  "Select Year": "শিক্ষাবর্ষ নির্বাচন করুন",
+  "Student's Image:": "শিক্ষার্থীর ছবি:",
+  "Student Photo": "শিক্ষার্থীর ছবি",
+  "ছবি নির্বাচন করুন (Browse...)": "ছবি নির্বাচন করুন",
+  "পাসপোর্ট সাইজের রঙিন ছবি আপলোড করুন (সর্বোচ্চ 2MB, JPG/PNG)।": "পাসপোর্ট সাইজের রঙিন ছবি আপলোড করুন (সর্বোচ্চ ২ মেগাবাইট, জেপিজি/পিএনজি)।",
+  "Next / আবেদন সম্পন্ন করুন": "আবেদন সম্পন্ন করুন",
+  "ভর্তি আবেদন স্লিপ (Application Slip)": "ভর্তি আবেদন স্লিপ"
+};
+const optionTranslations: Record<string, string> = {
+  "Dhaka": "ঢাকা",
+  "Chittagong": "চট্টগ্রাম",
+  "Rajshahi": "রাজশাহী",
+  "Khulna": "খুলনা",
+  "Barisal": "বরিশাল",
+  "Sylhet": "সিলেট",
+  "Rangpur": "রংপুর",
+  "Mymensingh": "ময়মনসিংহ",
+  "Gazipur": "গাজীপুর",
+  "Narayanganj": "নারায়ণগঞ্জ",
+  "Narsingdi": "নরসিংদী",
+  "Tangail": "টাঙ্গাইল",
+  "Manikganj": "মানিকগঞ্জ",
+  "Munshiganj": "মুন্সিগঞ্জ",
+  "Kishoreganj": "কিশোরগঞ্জ",
+  "Faridpur": "ফরিদপুর",
+  "Cumilla": "কুমিল্লা",
+  "Bogura": "বগুড়া",
+  "Tongi": "টঙ্গী",
+  "Gazipur Sadar": "গাজীপুর সদর",
+  "Kaliakair": "কালিয়াকৈর",
+  "Kapasia": "কাপাসিয়া",
+  "Kaliganj": "কালীগঞ্জ",
+  "Sreepur": "শ্রীপুর",
+  "Savar": "সাভার",
+  "Uttara": "উত্তরা",
+  "Mirpur": "মিরপুর",
+  "Dhamrai": "ধামরাই",
+  "General (সাধারণ)": "সাধারণ",
+  "বিজ্ঞান (Science)": "বিজ্ঞান",
+  "মানবিক (Humanities)": "মানবিক"
+};
+function EditableText(props: React.ComponentProps<typeof CmsText>) { return <CmsText {...props} translations={formTranslations} />; }
 
 const divisions = [
   "Dhaka",
@@ -183,7 +269,7 @@ export default function ApplyOnlineForm() {
     if (saved) {
       setSubmittedApplication({
         appId: saved.reference,
-        date: new Date().toLocaleDateString("en-GB", {
+        date: new Date().toLocaleDateString("bn-BD", {
           day: "2-digit",
           month: "short",
           year: "numeric",
@@ -238,7 +324,7 @@ export default function ApplyOnlineForm() {
                 name="studentName"
                 type="text"
                 required
-                placeholder="Student Name..."
+                placeholder="শিক্ষার্থীর নাম লিখুন"
                 value={formData.studentName}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -256,7 +342,7 @@ export default function ApplyOnlineForm() {
                   id="studentUid"
                   name="studentUid"
                   type="text"
-                  placeholder="Student UID..."
+                  placeholder="পরিচিতি নম্বর লিখুন"
                   value={formData.studentUid}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -292,7 +378,7 @@ export default function ApplyOnlineForm() {
                   id="birthCertificateNumber"
                   name="birthCertificateNumber"
                   type="text"
-                  placeholder="Birth Certificate..."
+                  placeholder="জন্ম নিবন্ধন নম্বর লিখুন"
                   value={formData.birthCertificateNumber}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -354,7 +440,7 @@ export default function ApplyOnlineForm() {
                   name="fatherName"
                   type="text"
                   required
-                  placeholder="Father's Name..."
+                  placeholder="পিতার নাম লিখুন"
                   value={formData.fatherName}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -370,7 +456,7 @@ export default function ApplyOnlineForm() {
                   id="fatherProfession"
                   name="fatherProfession"
                   type="text"
-                  placeholder="Father's Profession..."
+                  placeholder="পিতার পেশা লিখুন"
                   value={formData.fatherProfession}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -391,7 +477,7 @@ export default function ApplyOnlineForm() {
                   name="fatherMobile"
                   type="tel"
                   required
-                  placeholder="Father's Mobile No..."
+                  placeholder="পিতার মোবাইল নম্বর লিখুন"
                   value={formData.fatherMobile}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -409,7 +495,7 @@ export default function ApplyOnlineForm() {
                   name="fatherNid"
                   type="text"
                   required
-                  placeholder="Father's NID No..."
+                  placeholder="পিতার জাতীয় পরিচয়পত্র নম্বর লিখুন"
                   value={formData.fatherNid}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -428,7 +514,7 @@ export default function ApplyOnlineForm() {
                   id="guardianName"
                   name="guardianName"
                   type="text"
-                  placeholder="Guardian Name..."
+                  placeholder="অভিভাবকের নাম লিখুন"
                   value={formData.guardianName}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -444,7 +530,7 @@ export default function ApplyOnlineForm() {
                   id="guardianRelation"
                   name="guardianRelation"
                   type="text"
-                  placeholder="Relation..."
+                  placeholder="সম্পর্ক লিখুন"
                   value={formData.guardianRelation}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -477,7 +563,7 @@ export default function ApplyOnlineForm() {
                   name="motherName"
                   type="text"
                   required
-                  placeholder="Mother's Name..."
+                  placeholder="মাতার নাম লিখুন"
                   value={formData.motherName}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -493,7 +579,7 @@ export default function ApplyOnlineForm() {
                   id="motherProfession"
                   name="motherProfession"
                   type="text"
-                  placeholder="Mother's Profession..."
+                  placeholder="মাতার পেশা লিখুন"
                   value={formData.motherProfession}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -512,7 +598,7 @@ export default function ApplyOnlineForm() {
                   id="motherMobile"
                   name="motherMobile"
                   type="tel"
-                  placeholder="Mother's Mobile No..."
+                  placeholder="মাতার মোবাইল নম্বর লিখুন"
                   value={formData.motherMobile}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -528,7 +614,7 @@ export default function ApplyOnlineForm() {
                   id="motherNid"
                   name="motherNid"
                   type="text"
-                  placeholder="Mother's NID No..."
+                  placeholder="মাতার জাতীয় পরিচয়পত্র নম্বর লিখুন"
                   value={formData.motherNid}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -584,7 +670,7 @@ export default function ApplyOnlineForm() {
                   <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="e1s90hid" fallback={"Select Division"} /></option>
                   {divisions.map((div) => (
                     <option key={div} value={div}>
-                      {div}
+                      {optionTranslations[div] ?? div}
                     </option>
                   ))}
                 </select>
@@ -610,7 +696,7 @@ export default function ApplyOnlineForm() {
                   <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="e1lismnc" fallback={"Select District"} /></option>
                   {districts.map((dist) => (
                     <option key={dist} value={dist}>
-                      {dist}
+                      {optionTranslations[dist] ?? dist}
                     </option>
                   ))}
                 </select>
@@ -633,7 +719,7 @@ export default function ApplyOnlineForm() {
                   <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="e1nbkejo" fallback={"Select Upazila/Thana"} /></option>
                   {upazilas.map((upa) => (
                     <option key={upa} value={upa}>
-                      {upa}
+                      {optionTranslations[upa] ?? upa}
                     </option>
                   ))}
                 </select>
@@ -653,7 +739,7 @@ export default function ApplyOnlineForm() {
                   name="presentPostOffice"
                   type="text"
                   required
-                  placeholder="Post Office..."
+                  placeholder="ডাকঘরের নাম লিখুন"
                   value={formData.presentPostOffice}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -669,7 +755,7 @@ export default function ApplyOnlineForm() {
                   id="presentPostalCode"
                   name="presentPostalCode"
                   type="text"
-                  placeholder="Postal Code..."
+                  placeholder="ডাক কোড লিখুন"
                   value={formData.presentPostalCode}
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -689,7 +775,7 @@ export default function ApplyOnlineForm() {
                 name="presentVillage"
                 type="text"
                 required
-                placeholder="Address..."
+                placeholder="গ্রাম বা ঠিকানা লিখুন"
                 value={formData.presentVillage}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-1.5 text-xs sm:text-sm text-gray-800 bg-white focus:outline-none focus:border-[#371b61] focus:ring-1 focus:ring-[#371b61] transition-all placeholder:text-gray-400"
@@ -759,7 +845,7 @@ export default function ApplyOnlineForm() {
                   <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="e9upicm" fallback={"Select Division"} /></option>
                   {divisions.map((div) => (
                     <option key={div} value={div}>
-                      {div}
+                      {optionTranslations[div] ?? div}
                     </option>
                   ))}
                 </select>
@@ -786,7 +872,7 @@ export default function ApplyOnlineForm() {
                   <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="eud2vzn" fallback={"Select District"} /></option>
                   {districts.map((dist) => (
                     <option key={dist} value={dist}>
-                      {dist}
+                      {optionTranslations[dist] ?? dist}
                     </option>
                   ))}
                 </select>
@@ -810,7 +896,7 @@ export default function ApplyOnlineForm() {
                   <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="e1m9zpdw" fallback={"Select Upazila/Thana"} /></option>
                   {upazilas.map((upa) => (
                     <option key={upa} value={upa}>
-                      {upa}
+                      {optionTranslations[upa] ?? upa}
                     </option>
                   ))}
                 </select>
@@ -828,7 +914,7 @@ export default function ApplyOnlineForm() {
                   id="permanentPostOffice"
                   name="permanentPostOffice"
                   type="text"
-                  placeholder="Post Office..."
+                  placeholder="ডাকঘরের নাম লিখুন"
                   value={formData.permanentPostOffice}
                   onChange={handleChange}
                   disabled={formData.sameAsPresent}
@@ -845,7 +931,7 @@ export default function ApplyOnlineForm() {
                   id="permanentPostalCode"
                   name="permanentPostalCode"
                   type="text"
-                  placeholder="Postal Code..."
+                  placeholder="ডাক কোড লিখুন"
                   value={formData.permanentPostalCode}
                   onChange={handleChange}
                   disabled={formData.sameAsPresent}
@@ -864,7 +950,7 @@ export default function ApplyOnlineForm() {
                 id="permanentVillage"
                 name="permanentVillage"
                 type="text"
-                placeholder="Village..."
+                placeholder="গ্রামের নাম লিখুন"
                 value={formData.permanentVillage}
                 onChange={handleChange}
                 disabled={formData.sameAsPresent}
@@ -926,7 +1012,7 @@ export default function ApplyOnlineForm() {
                 <option value=""><EditableText plain document="copy.ui.ApplyOnlineForm" entry="e1vf7f0y" fallback={"Select Group"} /></option>
                 {groups.map((grp) => (
                   <option key={grp} value={grp}>
-                    {grp}
+                    {optionTranslations[grp] ?? grp}
                   </option>
                 ))}
               </select>
@@ -994,7 +1080,7 @@ export default function ApplyOnlineForm() {
               {studentImage ? (
                 <Image
                   src={studentImage}
-                  alt="Student Preview"
+                  alt="শিক্ষার্থীর ছবির নমুনা"
                   fill
                   className="object-cover"
                 />
@@ -1109,6 +1195,7 @@ export default function ApplyOnlineForm() {
                       formData.presentDistrict,
                     ]
                       .filter(Boolean)
+                      .map((value) => optionTranslations[value] ?? value)
                       .join(", ") || "—"}
                   </p>
                 </div>

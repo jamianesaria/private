@@ -6,6 +6,10 @@ import BreakingNewsBar from "@/components/BreakingNewsBar";
 import Footer from "@/components/Footer";
 import ApplyOnlineForm from "@/components/ApplyOnlineForm";
 
+// This route loads the CMS editing context before rendering in the local Next.js app.
+// The Cloudflare site serves its published snapshot as static content.
+export const instant = false;
+
 export const generateMetadata = editableMetadata("/apply", {
   title: "অনলাইন ভর্তি আবেদন ফরম | জামিয়া নেছারিয়া ইসলামিয়া টঙ্গী",
   description:

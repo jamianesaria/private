@@ -6,9 +6,10 @@ import { annotation, fieldSource, entryFor, imageProps, mappedData, type CopyIma
 
 const Context = createContext<CopyState>({ documents: {}, preview: false });
 export function CopyProvider({ value, children }: { value: CopyState; children: ReactNode }) { return <Context value={value}>{children}</Context>; }
-export function EditableText({ document, entry, fallback, plain = false }: { document: string; entry: string; fallback: string; plain?: boolean }) {
+export function EditableText({ document, entry, fallback, plain = false, translations }: { document: string; entry: string; fallback: string; plain?: boolean; translations?: Record<string, string> }) {
   const state = useContext(Context);
-  const text = entryFor(state, document, entry)?.text ?? fallback;
+  const original = entryFor(state, document, entry)?.text ?? fallback;
+  const text = translations?.[original] ?? translations?.[original.replaceAll("&apos;", "'")] ?? original;
   return state.preview && !plain ? <span data-sanity={annotation(state, { document, key: entry, field: "text" })}>{text}</span> : text;
 }
 export function EditableImage(props: CopyImageProps) { const resolved = imageProps(useContext(Context), props); return <Image {...resolved} alt={resolved.alt} />; }
